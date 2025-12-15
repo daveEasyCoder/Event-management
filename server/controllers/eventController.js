@@ -88,8 +88,6 @@ export const deleteEvent = async (req, res) => {
 };
 
 
-
-// Update Event
 // export const updateEvent = async (req, res) => {
 //     try {
 //         const { id } = req.params;
@@ -173,10 +171,10 @@ export const updateEvent = async (req, res) => {
       vipPrice
     } = req.body;
 
-    // Prepare update data
+   
     const updateData = {};
 
-    // Update basic fields if provided
+    
     if (title !== undefined) updateData.title = title;
     if (description !== undefined) updateData.description = description;
     if (isPublished !== undefined) updateData.isPublished = isPublished === 'true';
@@ -185,12 +183,12 @@ export const updateEvent = async (req, res) => {
     if (startDate !== undefined) updateData.startDate = startDate;
     if (endDate !== undefined) updateData.endDate = endDate;
 
-    // Handle image upload
+   
     if (req.file) {
       updateData.images = req.file.filename;
     }
 
-    // Parse and update normalPrice
+  
     if (normalPrice !== undefined) {
       if (normalPrice && normalPrice.trim() !== '') {
         try {
@@ -210,7 +208,7 @@ export const updateEvent = async (req, res) => {
       }
     }
 
-    // Parse and update vipPrice
+   
     if (vipPrice !== undefined) {
       if (vipPrice && vipPrice.trim() !== '') {
         try {
@@ -234,7 +232,7 @@ export const updateEvent = async (req, res) => {
       updateData.image = req.file.filename;
     }
 
-    // Update the event
+   
     const updatedEvent = await Event.findByIdAndUpdate(
       id,
       updateData,
@@ -271,10 +269,10 @@ export const getAllEvents = async (req, res) => {
       organizer = ''
     } = req.query;
 
-    // Build query
+   
     const query = {};
 
-    // Search by title only (not description)
+    // Search by title only 
     if (search && search.trim()) {
       query.title = { $regex: search.trim(), $options: 'i' };
     }
@@ -284,7 +282,7 @@ export const getAllEvents = async (req, res) => {
       query.category = category;
     }
 
-    // Filter by organizer (if you want to show only current user's events)
+    // Filter by organizer
     if (organizer) {
       query.organizer = organizer;
     }
@@ -352,10 +350,10 @@ export const getAllEvents = async (req, res) => {
       }
     }
 
-    // Sorting - newest first by default
+   
     const sort = { createdAt: -1 };
 
-    // Execute query - get all events (no pagination)
+   
     const events = await Event.find(query)
       .populate('category', 'name')
       .populate('venue', 'name city')
