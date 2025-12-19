@@ -36,7 +36,7 @@ const UserOrdersPage = () => {
   const fetchUserOrders = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${BASE_URL}/api/orders/user-orders`, {
+      const response = await axios.get(`${BASE_URL}/api/orders/my-orders`, {
         withCredentials: true
       });
 

@@ -47,7 +47,7 @@ export const register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
 
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    // const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
     const newUser = new User({
       name,
@@ -55,8 +55,6 @@ export const register = async (req, res) => {
       password: hashedPassword,
       phone,
       role,
-      otp,
-      otpExpires: Date.now() + 5 * 60 * 1000 // 5 minutes
     });
 
     await newUser.save();

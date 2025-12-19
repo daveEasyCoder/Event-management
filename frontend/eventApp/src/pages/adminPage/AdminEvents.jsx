@@ -118,12 +118,13 @@ const AdminEventListPage = () => {
     }
 
     try {
-      const response = await axios.delete(`/api/events/${eventId}`, {
+      const response = await axios.delete(`${BASE_URL}/api/events/delete-event/${eventId}`, {
         withCredentials: true
       });
 
       if (response.data.success) {
         setEvents(events.filter(event => event.id !== eventId));
+        toastSuccess(response.data?.message || "Event deleted Successfully")
       }
     } catch (error) {
       console.error('Error deleting event:', error);

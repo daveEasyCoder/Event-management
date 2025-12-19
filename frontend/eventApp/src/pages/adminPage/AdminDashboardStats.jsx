@@ -56,8 +56,15 @@ const BasicDashboard = () => {
       if (response.data.success) {
         setStats(response.data.stats);
       }
-    } catch (error) {
-      console.error('Error fetching stats:', error);
+    } catch (err) {
+       if(err.response){
+            if(err.response.status === 401 || err.response.status === 403){
+              navigate("/login")
+            }
+       }else{
+        console.log(("server is not responding. try again later."));  
+       }
+      console.error('Error fetching stats:', err);
     } finally {
       setLoading(false);
     }
