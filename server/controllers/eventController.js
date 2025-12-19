@@ -90,63 +90,6 @@ export const deleteEvent = async (req, res) => {
 };
 
 
-// export const updateEvent = async (req, res) => {
-//     try {
-//         const { id } = req.params;
-
-//         const {
-//             title,
-//             description,
-//             organizer,
-//             category,
-//             venue,
-//             startDate,
-//             endDate,
-//             image,
-//             normalPrice,
-//             vipPrice
-//         } = req.body;
-
-//         const updatedEvent = await Event.findByIdAndUpdate(
-//             id,
-//             {
-//                 title,
-//                 description,
-//                 organizer,
-//                 category,
-//                 venue,
-//                 startDate,
-//                 endDate,
-//                 image,
-//                 normalPrice,
-//                 vipPrice
-//             },
-//             { new: true }
-//         );
-
-//         if (!updatedEvent) {
-//             return res.status(404).json({
-//                 success: false,
-//                 message: "Event not found"
-//             });
-//         }
-
-//         return res.status(200).json({
-//             success: true,
-//             message: "Event updated successfully",
-//             updatedEvent
-//         });
-
-//     } catch (error) {
-//         console.error(error);
-//         return res.status(500).json({
-//             success: false,
-//             message: "Internal Server Problem"
-//         });
-//     }
-// };
-
-// controllers/eventController.js - updateEvent
 export const updateEvent = async (req, res) => {
   try {
     const { id } = req.params;
