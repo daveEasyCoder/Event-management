@@ -6,6 +6,8 @@ const TicketSchema = new mongoose.Schema({
     ticketType: { type: String, enum: ["normal", "vip"], required: true },
     price: { type: Number, required: true },
     qrCode: String,
+    ticketCode: { type: String, default:"" },
+    order: { type: mongoose.Schema.Types.ObjectId, ref: "Order", required: true },
     isUsed: { type: Boolean, default: false },
 }, { timestamps: true });
 

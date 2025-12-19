@@ -103,7 +103,7 @@ const EditVenue = () => {
 
       if (res.data.success) {
         toastSuccess(res.data.message);
-        navigate('/venues'); // Redirect to venue list
+        navigate("organizer/event-list")
       }
 
     } catch (err) {

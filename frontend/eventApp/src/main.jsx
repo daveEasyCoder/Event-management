@@ -6,8 +6,6 @@ import { ApiProvider } from './context/EventContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ApiProvider>
       <App />
-    </ApiProvider>
   </StrictMode>,
 )

@@ -101,6 +101,7 @@ const UpdateVenue = () => {
 
       if (res.data.success) {
         toastSuccess(res.data.message);
+        navigate("/organizer/venue-list")
       }
 
     } catch (err) {
@@ -150,17 +151,17 @@ const UpdateVenue = () => {
   }
 
   return (
-    <div className="ml-4 p-8">
+    <div className="ml-60 p-8 pt-20">
       {/* Back Button */}
       <Link
-        to="/venues"
+        to="/organizer/event-list"
         className="inline-flex items-center gap-2 text-gray-600 hover:text-blue-600 transition mb-6"
       >
         <FaArrowLeft />
         Back to Venues
       </Link>
 
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-2xl">
         <div className="bg-white rounded-lg shadow p-6">
           <h1 className="text-2xl font-bold text-gray-800 mb-6">Edit Venue</h1>
 

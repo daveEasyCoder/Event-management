@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 
 export const register = async (req, res) => {
   try {
-    const { name, email, password, phone, } = req.body;
+    const { name, email, password, phone, secretKey} = req.body;
 
     if (!name) return res.status(404).json({ success: false, message: "Full name requred" })
     if (!email) return res.status(404).json({ success: false, message: "Email requred" })
@@ -33,6 +33,17 @@ export const register = async (req, res) => {
       });
     }
 
+    let role = "user"
+    const secret = process.env.SECRET_KEY
+    if(secretKey){
+      if(secretKey !== secret){
+       return res.status(400).json({success:false,message:"Invalid secretKey"})
+      }else{
+        role = "admin"
+      }
+    }
+
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
 
@@ -43,21 +54,22 @@ export const register = async (req, res) => {
       email,
       password: hashedPassword,
       phone,
+      role,
       otp,
       otpExpires: Date.now() + 5 * 60 * 1000 // 5 minutes
     });
 
     await newUser.save();
 
-    await sendEmail(
-      email,
-      "Your OTP Verification Code",
-      `Your OTP code is: ${otp}. It will expire in 5 minutes.`
-    );
+    // await sendEmail(
+    //   email,
+    //   "Your OTP Verification Code",
+    //   `Your OTP code is: ${otp}. It will expire in 5 minutes.`
+    // );
 
     res.status(201).json({
       success: true,
-      message: "User registered successfully. OTP sent to email",
+      message: `Successfully registered as ${role}`,
       userId: newUser._id,
     });
 
@@ -162,12 +174,12 @@ export const login = async (req, res) => {
       });
     }
 
-    if (!user.isVerified) {
-      return res.status(400).json({
-        success: false,
-        message: "Your account is not verified. Please verify OTP.",
-      });
-    }
+    // if (!user.isVerified) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: "Your account is not verified. Please verify OTP.",
+    //   });
+    // }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
@@ -184,14 +196,15 @@ export const login = async (req, res) => {
         role: user.role
       },
       process.env.JWT_SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: "1d" }
     );
 
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 1 * 24 * 60 * 60 * 1000,
+      path: "/",
     });
 
     return res.json({
@@ -216,9 +229,114 @@ export const login = async (req, res) => {
 
 
 export const logout = (req, res) => {
-  res.clearCookie("token");
+  res.clearCookie("token", {
+    httpOnly: true,
+    sameSite: "none",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+  });
+
   return res.json({
     success: true,
-    message: "Logged out successfully"
+    message: "Logged out successfully",
   });
+};
+
+
+//CHANGE ROLE ---------> ONLY FOR ADMIN
+export const changeUserRole = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { role } = req.body;
+
+
+    const allowedRoles = ["user", "organizer", "admin"];
+    if (!allowedRoles.includes(role)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid role",
+      });
+    }
+
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    user.role = role;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "User role updated successfully",
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
+
+// GET ALL USERS ---------> ONLY FOR ADMIN
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find()
+      .select("-password") 
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      count: users.length,
+      users,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
+export const getUserProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const user = await User.findById(userId).select(
+      "-password -otp -otpExpires"
+    );
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      user,
+    });
+
+  } catch (error) {
+    console.error("Get profile error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch user profile",
+    });
+  }
 };

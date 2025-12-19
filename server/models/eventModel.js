@@ -20,6 +20,7 @@ const EventSchema = new mongoose.Schema({
         quantity:{ type: Number,default:0}
     },
 
+    totalTicketsSold:{type:Number,default:0},
     isPublished: { type: Boolean, default: false },
 
 }, { timestamps: true });

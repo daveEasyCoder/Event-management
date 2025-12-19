@@ -144,8 +144,8 @@ const EventList = () => {
   };
 
   return (
-    <div className="ml-64 p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="ml-60 p-8 pt-20">
+      <div className="max-w-7xl">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
@@ -258,7 +258,6 @@ const EventList = () => {
                   <thead className="bg-gray-50 border-b border-gray-200">
                     <tr>
                       <th className="text-left py-4 px-6 font-medium text-gray-700">Event</th>
-                      <th className="text-left py-4 px-6 font-medium text-gray-700">Date & Time</th>
                       <th className="text-left py-4 px-6 font-medium text-gray-700">Category</th>
                       <th className="text-left py-4 px-6 font-medium text-gray-700">Venue</th>
                       <th className="text-left py-4 px-6 font-medium text-gray-700">Pricing</th>
@@ -290,16 +289,6 @@ const EventList = () => {
                                 <p className="text-sm text-gray-600">
                                   {event.category?.name || 'No category'}
                                 </p>
-                              </div>
-                            </div>
-                          </td>
-
-                          {/* Date & Time */}
-                          <td className="py-4 px-6">
-                            <div className="space-y-1">
-                              <div className="flex items-center gap-2">
-                                <FaClock className="text-gray-400 text-sm" />
-                                <span className="text-sm font-medium">{formatDate(event.startDate)}</span>
                               </div>
                             </div>
                           </td>

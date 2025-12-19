@@ -96,7 +96,7 @@ const CreateVenue = () => {
   };
 
   return (
-    <div className="ml-4 p-8">
+    <div className="ml-60 p-8 pt-20">
       {/* Message Alert */}
       {message && (
         <div className='mb-6 p-4 rounded-lgbg-red-100 text-red-700 border border-red-200'>
@@ -104,7 +104,7 @@ const CreateVenue = () => {
         </div>
       )}
 
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-2xl">
         <div className="bg-white rounded-lg shadow p-6">
           <h1 className="text-2xl font-bold text-gray-800 mb-6">Create New Venue</h1>
 

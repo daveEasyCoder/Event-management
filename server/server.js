@@ -8,11 +8,13 @@ import userRoutes from './routes/userRoutes.js'
 import eventRoutes from './routes/eventRoutes.js'
 import venueRoutes from './routes/venueRoutes.js'
 import categoryRoutes from './routes/categoryRoutes.js'
-
+import orderRoutes from './routes/orderRoutes.js'
+import ticketRoutes from './routes/ticketRoutes.js'
+import adminRoutes from './routes/adminRoutes.js'
 
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 app.use(cors({
   origin: "http://localhost:5173",  
@@ -27,6 +29,9 @@ app.use('/api/users', userRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/venues', venueRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/tickets', ticketRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.use("/uploads", express.static("uploads"));
 

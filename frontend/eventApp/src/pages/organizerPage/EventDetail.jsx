@@ -154,7 +154,7 @@ const EventDetail = () => {
 
   if (error || !event) {
     return (
-      <div className="ml-64 p-8">
+      <div className="ml-60 p-8">
         <div className="max-w-4xl mx-auto">
           <div className="bg-white rounded-xl shadow p-8 text-center">
             <FaTimesCircle className="text-red-500 text-6xl mx-auto mb-4" />
@@ -176,7 +176,7 @@ const EventDetail = () => {
   const status = getEventStatus(event);
 
   return (
-    <div className="ml-64 p-8">
+    <div className="ml-60 p-8 pt-21">
       <div className="max-w-6xl mx-auto">
         {/* Header with Back Button */}
         <div className="mb-8">

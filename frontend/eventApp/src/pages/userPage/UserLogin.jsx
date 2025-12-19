@@ -32,8 +32,10 @@ const UserLogin = () => {
                 if(res.data.success){
                   if(res.data.user.role === 'organizer'){
                      navigate("/organizer/event-list")
-                  }else if(res.data.user.role === 'user'){
-                     navigate("/")
+                  }else if(res.data.user.role === 'admin'){
+                     navigate("/admin")
+                  }else{
+                    navigate('/')
                   }
                 }
                 setLoading(false)
@@ -96,13 +98,6 @@ const UserLogin = () => {
                 <input type="password"  onChange={(e) => setPassword(e.target.value)} placeholder="Password" className="bg-transparent text-gray-500/80 placeholder-gray-500/80 outline-none text-sm w-full h-full" required />
             </div>
 
-            <div className="w-full flex items-center justify-between mt-8 text-gray-500/80">
-                <div className="flex items-center gap-2">
-                    <input className="h-5" type="checkbox" id="checkbox" />
-                    <label htmlFor="" className="text-sm" for="checkbox">Remember me</label>
-                </div>
-                <a className="text-sm underline" href="#">Forgot password?</a>
-            </div>
 
             <button disabled = {loading} type="submit" className={`mt-8 w-full ${loading ? "cursor-not-allowed opacity-50" : "cursor-pointer"} h-11 rounded-full text-white bg-indigo-500`}>
                 Login

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { FaPlus, FaSpinner, FaCalendar, FaTag, FaMapMarkerAlt, FaImage, FaDollarSign, FaCrown } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useEventContext } from '../../context/EventContext';
+import { toastSuccess } from '../../../utility/toast';
 
 
 const CreateEvent = () => {
@@ -205,7 +206,8 @@ const CreateEvent = () => {
               const res = await axios.post(`${BASE_URL}/api/events/create-event`, formDataToSend,{withCredentials:true});
 
               if (res.data.success) {
-                showMessage('success', 'Event created successfully!');
+               toastSuccess(res.data.message)
+               navigate("/organizer/event-list")
 
               } else {
                 showMessage('error', res.data.message || 'Failed to create event');
@@ -219,10 +221,10 @@ const CreateEvent = () => {
     };
 
     return (
-        <div className="ml-64 p-8">
+        <div className="ml-60 p-8 pt-20">
 
-            <div className="max-w-4xl mx-auto">
-                <div className="bg-white rounded-xl shadow-lg p-8">
+            <div className="max-w-4xl">
+                <div className="bg-white rounded-xl shadow-sm p-8">
                     <div className="mb-8">
                         <h1 className="text-3xl font-bold text-gray-800 mb-2">Create New Event</h1>
                         <p className="text-gray-600">Fill in the details below to create a new event</p>

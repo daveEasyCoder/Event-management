@@ -1,5 +1,5 @@
 import express from 'express';
-import { createEvent, deleteEvent, getAllEvents, getEventById, updateEvent } from '../controllers/eventController.js';
+import { createEvent, deleteEvent, getAllEvents, getEventById, getEventsByCategory, getEventsByVenue, updateEvent } from '../controllers/eventController.js';
 import upload from '../middlewares/uploadMiddleware.js'
 import { protect } from '../middlewares/authMiddleware.js';
 
@@ -10,5 +10,7 @@ router.delete('/delete-event/:id',protect, deleteEvent);
 router.put('/update-event/:id', protect, upload.single("image"), updateEvent);
 router.get('/get-all-events', protect, getAllEvents);
 router.get('/get-eventById/:id', protect, getEventById);
+router.get('/get-eventByCategory/:categoryId', protect, getEventsByCategory);
+router.get('/get-event-by-venue/:venueId',protect, getEventsByVenue);
 
 export default router;

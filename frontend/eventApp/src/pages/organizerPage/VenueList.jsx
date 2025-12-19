@@ -71,8 +71,8 @@ const VenueList = () => {
   };
 
   return (
-    <div className="ml-64 p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="ml-60 p-8 pt-20">
+      <div className="max-w-7xl">
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <div>
@@ -130,7 +130,7 @@ const VenueList = () => {
                   <div className="w-16 h-16 shrink-0 mb-4 md:mb-0">
                     {venue.image ? (
                       <img
-                        src={`${BASE_URL}/uploads/venue/${venue.image}`}
+                        src={`${BASE_URL}/uploads/${venue.image}`}
                         className="w-16 h-16 rounded-lg object-cover border border-gray-200"
                         onError={(e) => {
                           e.target.onerror = null;

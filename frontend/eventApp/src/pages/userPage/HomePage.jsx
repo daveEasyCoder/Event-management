@@ -1,11 +1,13 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { FaSearch, FaChevronDown, FaCalendarAlt, FaMapMarkerAlt, FaBars, FaTimes } from "react-icons/fa";
 import Category from "../../components/Category";
-import Events from "../../components/Events";
 import VenueList from "../../components/Venues";
+import LatestEvents from "../../components/LatestEvents";
+import { useEventContext } from "../../context/EventContext";
+import axios from "axios";
 
-// Custom Select Component with better styling
+// Custom Select Component
 const CustomSelect = ({ value, onChange, options, placeholder, icon: Icon }) => {
   return (
     <div className="relative w-full md:w-auto flex-1">
@@ -33,19 +35,24 @@ const CustomSelect = ({ value, onChange, options, placeholder, icon: Icon }) => 
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user, setUser,BASE_URL,getUserProfile } = useEventContext()
 
+
+  useEffect(() => {
+    getUserProfile();
+  }, []);
   return (
     <nav className="fixed top-3 flex items-center justify-center left-0 right-0 z-50  shadow-lg">
-      <div className="w-[95%] rounded-3xl px-4 bg-white">
+      <div className="w-[95%] rounded-3xl px-6 bg-white">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center">
             <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-r from-green-600 to-emerald-500 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-linear-to-r from-green-600 to-emerald-500 rounded-lg flex items-center justify-center">
                 <FaCalendarAlt className="text-white text-xl" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-green-700 to-emerald-600 bg-clip-text text-transparent">
+                <h1 className="text-2xl font-bold bg-linear-to-r from-green-700 to-emerald-600 bg-clip-text text-transparent">
                   Chillux
                 </h1>
                 <p className="text-xs text-gray-500 -mt-1">Extraordinary Events</p>
@@ -54,7 +61,7 @@ const Navbar = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-10">
             <Link to="/" className="text-gray-700 hover:text-green-600 font-medium transition-colors relative group">
               Home
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-600 group-hover:w-full transition-all duration-300"></span>
@@ -67,14 +74,17 @@ const Navbar = () => {
               Suppliers
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-600 group-hover:w-full transition-all duration-300"></span>
             </Link>
-            <Link to="/about" className="text-gray-700 hover:text-green-600 font-medium transition-colors relative group">
-              About
+            <Link to="/my-order" className="text-gray-700 hover:text-green-600 font-medium transition-colors relative group">
+              My Orders
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-600 group-hover:w-full transition-all duration-300"></span>
             </Link>
-            <Link to="/contact" className="text-gray-700 hover:text-green-600 font-medium transition-colors relative group">
-              Contact
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-600 group-hover:w-full transition-all duration-300"></span>
-            </Link>
+            {
+              user && user?.email ?
+                <div>
+                  <div className="w-10 h-10 bg-green-800 flex items-center justify-center text-white font-bold rounded-full">{user.name.slice(0, 1).toUpperCase()}</div>
+                </div>
+                : ''
+            }
           </div>
 
           {/* Mobile Menu Button */}
@@ -147,12 +157,11 @@ const Hero = () => {
   return (
     <>
       <Navbar />
-      
+
       <div
-        className="relative h-screen bg-cover bg-center bg-fixed"
-        style={{ 
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5)), url(bgImg.jpg)`,
-          backgroundAttachment: 'fixed'
+        className="relative h-screen bg-cover bg-center"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5)), url(bgImg.jpg)`
         }}
       >
         {/* Hero Content */}
@@ -173,9 +182,9 @@ const Hero = () => {
             {/* Search Container */}
             <div className=" rounded-2xl">
               <h2 className="text-2xl font-bold text-white mb-6">Find Your Perfect Event</h2>
-              
+
               <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-end">
-               
+
                 <CustomSelect
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
@@ -184,7 +193,7 @@ const Hero = () => {
                   icon={FaCalendarAlt}
                 />
 
-          
+
                 <CustomSelect
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
@@ -193,7 +202,7 @@ const Hero = () => {
                   icon={FaMapMarkerAlt}
                 />
 
-                
+
                 <button
                   onClick={handleSearch}
                   className="group w-full md:w-auto bg-linear-to-r from-green-600 to-emerald-500 hover:from-green-700 hover:to-emerald-600 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl flex items-center justify-center gap-3 shadow-lg"
@@ -216,7 +225,7 @@ const Hero = () => {
 
       <Category />
       <VenueList />
-      {/* <Events /> */}
+      <LatestEvents />
     </>
   );
 };

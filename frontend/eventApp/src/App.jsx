@@ -16,6 +16,18 @@ import VenueList from './pages/organizerPage/VenueList'
 import UpdateVenue from './pages/organizerPage/UpdateVenue'
 import CategoryList from './pages/organizerPage/CategoryList'
 import EditCategory from './pages/organizerPage/EditCategory'
+import Admin from './pages/adminPage/Admin'
+import Users from './pages/adminPage/Users'
+import EventAnalytics from './pages/organizerPage/EventAnalytics'
+import AdminEvents from './pages/adminPage/AdminEvents'
+import UserEventDetailPage from './pages/userPage/UserEventDetailPage'
+import UserOrdersPage from './pages/userPage/UserOrderPage'
+import CategoryEventsPage from './pages/userPage/CategoryEventsPage'
+import VenueEventsPage from './pages/userPage/VenueEventsPage'
+import AdminDashboardStats from './pages/adminPage/AdminDashboardStats'
+import RegisterPage from './pages/userPage/RegisterPage'
+import { ApiProvider } from './context/EventContext'
+import AdminOrderListPage from './pages/adminPage/AdminOrderListPage'
 
 function AppContent() {
 
@@ -23,8 +35,14 @@ function AppContent() {
     <>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<UserLogin />} />
+        <Route path="login" element={<UserLogin />} />
+        <Route path="register" element={<RegisterPage />} />
+        <Route path="user-event-detail/:id" element={<UserEventDetailPage />} />
+        <Route path="my-order" element={<UserOrdersPage />} />
+        <Route path="events-by-category/:categoryId" element={<CategoryEventsPage />} />
+        <Route path="events-by-venue/:venueId" element={<VenueEventsPage />} />
 
+        {/* ORGANIZER ROUTES */}
         <Route path='/organizer' element={<Organizer />}>
           <Route path="create-venue" element={<CreateVenue />} />
           <Route path="venue-list" element={<VenueList />} />
@@ -36,7 +54,18 @@ function AppContent() {
           <Route path="event-list" element={<EventList />} />
           <Route path="event-detail/:id" element={<EventDetail />} />
           <Route path="edit-event/:id" element={<EditEvent />} />
+          <Route path="event-analytics" element={<EventAnalytics />} />
         </Route>
+
+        {/* ADMIN ROUTES */}
+        <Route path='/admin' element={<Admin />}>
+          <Route path="users" element={<Users />} />
+          <Route path="events" element={<AdminEvents />} />
+          <Route path="admin-orders" element={<AdminOrderListPage />} />
+          <Route path="" element={<AdminDashboardStats />} />
+        </Route>
+
+
 
       </Routes>
 
@@ -48,18 +77,20 @@ function AppContent() {
 function App() {
   return (
     <BrowserRouter>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
-      <AppContent />
+      <ApiProvider>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+        <AppContent />
+      </ApiProvider>
     </BrowserRouter>
   );
 }

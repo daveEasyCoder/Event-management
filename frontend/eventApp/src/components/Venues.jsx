@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useEventContext } from '../context/EventContext';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const VenueList = () => {
 
@@ -13,7 +14,9 @@ const VenueList = () => {
     const [error, setError] = useState(null);
     const [showAll, setShowAll] = useState(false);
 
-      const scrollRef = useRef()
+   const scrollRef = useRef()
+
+   const navigate = useNavigate()
 
 
 
@@ -41,7 +44,6 @@ const VenueList = () => {
     let displayedVenues;
     if (venues && venues.length) {
         displayedVenues = showAll ? venues : venues?.slice(0, 4);
-        console.log(displayedVenues);
 
     }
 
@@ -89,7 +91,7 @@ const VenueList = () => {
                                         alt={venue.name}
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                     />
-                                    <span className="absolute bottom-3 right-3 text-sm font-semibold text-white bg-black/60 px-3 py-1 rounded-lg">
+                                    <span onClick={() => navigate(`/events-by-venue/${venue._id}`)} className="absolute cursor-pointer bottom-3 right-3 text-sm font-semibold text-white bg-black/60 px-3 py-1 rounded-lg">
                                         Explore
                                     </span>
                                 </div>

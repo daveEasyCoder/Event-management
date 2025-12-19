@@ -54,7 +54,7 @@ const Category = () => {
                 <img className='w-70 h-70 object-cover' src={`${BASE_URL}/uploads/${cat.image}`} alt="Image" />
                 <div className='absolute inset-0 bg-linear-to-t from-black/80 to-transparent flex items-center justify-center'>
                   <p className='font-medium text-2xl text-gray-200 mt-3'>{cat.name}</p>
-                  <Link to={`/category/${cat.category}`} className='text-white border text-sm absolute bottom-5 right-6 cursor-pointer px-3 rounded-full '>View</Link>
+                  <Link to={`/events-by-category/${cat._id}`} className='text-white border text-sm absolute bottom-5 right-6 cursor-pointer px-3 rounded-full '>View</Link>
                 </div>
               </div>
             )) : ''
