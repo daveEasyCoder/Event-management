@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const ApiContext = createContext();
 
 export const ApiProvider = ({ children }) => {
-  const BASE_URL = "http://localhost:3000";
+  const BASE_URL = "https://event-management-server-br57.onrender.com";
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(false)
 
