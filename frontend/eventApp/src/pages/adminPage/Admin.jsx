@@ -9,7 +9,7 @@ import {useEventContext} from '../../context/EventContext'
 const Admin = () => {
 
 
-    const {BASE_URL} = useEventContext()
+    const {handleLogout} = useEventContext()
     const [activeLink, setActiveLink] = useState(0);
     const sidebarLinks = [
         { name: "Dashboard", path: "", icon: <FaUser className="w-5 h-5" /> },
@@ -18,21 +18,6 @@ const Admin = () => {
         { name: "Orders", path: "admin-orders", icon: <FaList className="w-5 h-5" /> },
     ];
 
-    const navigate = useNavigate()
-
-    const handleLogout = async () => {
-        try {
-            const response = await axios.post(`${BASE_URL}/api/users/logout`, {
-                withCredentials: true
-            });
-            if(response.data.success){
-                navigate("/admin-login")
-            }
-        } catch (error) {
-            console.log(error);
-
-        }
-    }
     return (
         <>
             <div className="w-64 bg-white h-screen shadow-lg fixed left-0 top-0">

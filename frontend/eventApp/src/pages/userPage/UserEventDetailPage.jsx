@@ -40,7 +40,6 @@ const UserEventDetailPage = () => {
   const [selectedTicket, setSelectedTicket] = useState('normal');
   const [quantity, setQuantity] = useState(1);
   const [orderLoading, setOrderLoading] = useState(false);
-  const [showOrderForm, setShowOrderForm] = useState(false);
 
   // Fetch event details
   useEffect(() => {
@@ -147,13 +146,12 @@ const UserEventDetailPage = () => {
       return;
     }
 
-    setShowOrderForm(true);
+    handleOrderSubmit()
   };
 
 
   // SUBMIT ORDER
-  const handleOrderSubmit = async (e) => {
-    e.preventDefault();
+  const handleOrderSubmit = async () => {
     setOrderLoading(true);
 
     try {
@@ -169,13 +167,6 @@ const UserEventDetailPage = () => {
       };
 
 
-      if (!validateCardDetails(orderData)) {
-        alert('Please enter valid card details');
-        setOrderLoading(false);
-        return;
-      }
-
-
       const response = await axios.post(
         `${BASE_URL}/api/orders/create-order`,
         orderData,
@@ -189,8 +180,6 @@ const UserEventDetailPage = () => {
         if (response.data.paymentUrl) {
           window.location.href = response.data.paymentUrl;
         } else {
-          // Close modal and reset form
-          setShowOrderForm(false);
           setQuantity(1);
           toastSuccess(response.status.message || "Order created successully")
 
@@ -234,21 +223,6 @@ const UserEventDetailPage = () => {
     }
   };
 
-  // Add card validation function
-  const validateCardDetails = (orderData) => {
-    const { cardNumber, expiryDate, cvc } = orderData;
-
-    // Basic validation
-    const cardNumberRegex = /^[0-9]{16}$/;
-    const expiryDateRegex = /^(0[1-9]|1[0-2])\/([0-9]{2})$/;
-    const cvcRegex = /^[0-9]{3,4}$/;
-
-    return (
-      cardNumberRegex.test(cardNumber?.replace(/\s/g, '')) &&
-      expiryDateRegex.test(expiryDate) &&
-      cvcRegex.test(cvc)
-    );
-  };
 
 
 
@@ -300,110 +274,6 @@ const UserEventDetailPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Order Form Modal */}
-      {showOrderForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full">
-            <div className="p-6">
-              <h3 className="text-xl font-bold text-gray-800 mb-4">Complete Your Order</h3>
-
-              <form onSubmit={handleOrderSubmit}>
-                {/* Order Summary */}
-                <div className="bg-gray-50 p-4 rounded-lg mb-6">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="font-medium text-gray-700">
-                      {quantity} × {selectedTicket === 'normal' ? 'Normal Ticket' : 'VIP Ticket'}
-                    </span>
-                    <span className="font-bold text-gray-900">
-                      ${(selectedTicket === 'normal' ? event.normalPrice?.price : event.vipPrice?.price) || 0}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center pt-3 border-t border-gray-200">
-                    <span className="font-bold text-gray-800">Total</span>
-                    <span className="text-2xl font-bold text-green-600">
-                      ${ticketPrice.toFixed(2)}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Payment Information */}
-                <div className="space-y-4 mb-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Card Number
-                    </label>
-                    <input
-                      type="text"
-                      name='cardNumber'
-                      placeholder="1234 5678 9012 3456"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition"
-                      required
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Expiry Date
-                      </label>
-                      <input
-                        type="text"
-                        name='expiryDate'
-                        placeholder="MM/YY"
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition"
-                        required
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        CVC
-                      </label>
-                      <input
-                        type="text"
-                        name='cvc'
-                        placeholder="123"
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition"
-                        required
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex gap-4">
-                  <button
-                    type="button"
-                    onClick={() => setShowOrderForm(false)}
-                    className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition"
-                    disabled={orderLoading}
-                  >
-                    Cancel
-                  </button>
-
-                  <button
-                    type="submit"
-                    disabled={orderLoading}
-                    className="flex-1 bg-green-600 text-white py-3 rounded-lg font-medium hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                  >
-                    {orderLoading ? (
-                      <>
-                        <FaSpinner className="animate-spin" />
-                        Processing...
-                      </>
-                    ) : (
-                      <>
-                        <FaCreditCard />
-                        Pay Now
-                      </>
-                    )}
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -679,7 +549,6 @@ const UserEventDetailPage = () => {
               {/* Order Now Button */}
               <button
                 onClick={handleOrderNow}
-                disabled={getEventStatus() !== 'upcoming' && getEventStatus() !== 'ongoing'}
                 className="w-full bg-linear-to-r from-green-500 to-emerald-600 text-white py-4 px-6 rounded-xl font-bold text-lg hover:from-green-600 hover:to-emerald-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-lg"
               >
                 <FaCreditCard className="text-xl" />

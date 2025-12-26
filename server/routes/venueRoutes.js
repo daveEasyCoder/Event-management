@@ -7,7 +7,7 @@ import { authorize } from '../middlewares/roleCheckMiddleware.js';
 
 const router = express.Router();
 
-router.post('/create-venue',authorize("organizer","admin"), upload.single("image"), createVenue);
+router.post('/create-venue',protect, authorize('organizer','admin'), upload.single("image"), createVenue);
 router.get('/get-venue', protect, getVenue);
 router.get('/get-single-venue/:id', protect, getVenueById);
 router.delete('/delete-venue/:id', protect, authorize("organizer","admin"), deleteVenue);

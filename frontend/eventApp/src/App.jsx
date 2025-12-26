@@ -28,6 +28,7 @@ import AdminDashboardStats from './pages/adminPage/AdminDashboardStats'
 import RegisterPage from './pages/userPage/RegisterPage'
 import { ApiProvider } from './context/EventContext'
 import AdminOrderListPage from './pages/adminPage/AdminOrderListPage'
+import EventFilterPage from './pages/userPage/EventFilterPage'
 
 function AppContent() {
 
@@ -41,6 +42,7 @@ function AppContent() {
         <Route path="my-order" element={<UserOrdersPage />} />
         <Route path="events-by-category/:categoryId" element={<CategoryEventsPage />} />
         <Route path="events-by-venue/:venueId" element={<VenueEventsPage />} />
+        <Route path="events-filter" element={<EventFilterPage />} />
 
         {/* ORGANIZER ROUTES */}
         <Route path='/organizer' element={<Organizer />}>

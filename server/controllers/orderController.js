@@ -114,7 +114,6 @@ export const createOrder = async (req, res) => {
 
         // In production, we should integrate with payment gateway
         // For now, simulate payment success
-        order.paymentStatus = 'paid';
         await order.save();
 
 

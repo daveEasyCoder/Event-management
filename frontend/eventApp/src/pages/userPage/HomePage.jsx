@@ -6,6 +6,7 @@ import VenueList from "../../components/Venues";
 import LatestEvents from "../../components/LatestEvents";
 import { useEventContext } from "../../context/EventContext";
 import axios from "axios";
+import Profile from "./Profile";
 
 // Custom Select Component
 const CustomSelect = ({ value, onChange, options, placeholder, icon: Icon }) => {
@@ -35,7 +36,8 @@ const CustomSelect = ({ value, onChange, options, placeholder, icon: Icon }) => 
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { user, setUser,BASE_URL,getUserProfile } = useEventContext()
+  const { user, getUserProfile } = useEventContext()
+  const [ishProfileShow,setIsProfileShow] = useState(false)
 
 
   useEffect(() => {
@@ -66,7 +68,7 @@ const Navbar = () => {
               Home
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-600 group-hover:w-full transition-all duration-300"></span>
             </Link>
-            <Link to="/events" className="text-gray-700 hover:text-green-600 font-medium transition-colors relative group">
+            <Link to="/events-filter" className="text-gray-700 hover:text-green-600 font-medium transition-colors relative group">
               Events
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-600 group-hover:w-full transition-all duration-300"></span>
             </Link>
@@ -78,13 +80,18 @@ const Navbar = () => {
               My Orders
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-600 group-hover:w-full transition-all duration-300"></span>
             </Link>
-            {
-              user && user?.email ?
-                <div>
-                  <div className="w-10 h-10 bg-green-800 flex items-center justify-center text-white font-bold rounded-full">{user.name.slice(0, 1).toUpperCase()}</div>
-                </div>
-                : ''
-            }
+            <div className="relative">
+              {
+                user && user?.email ?
+                  <div onClick={() => setIsProfileShow(prev => !prev)}>
+                    <div className="w-10 h-10 bg-green-800 flex items-center justify-center text-white font-bold rounded-full">{user.name.slice(0, 1).toUpperCase()}</div>
+                  </div>
+                  : ''
+              }
+              { ishProfileShow &&   <Profile /> }
+             
+            </div>
+
           </div>
 
           {/* Mobile Menu Button */}

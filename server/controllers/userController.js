@@ -8,13 +8,13 @@ export const register = async (req, res) => {
   try {
     const { name, email, password, phone, secretKey} = req.body;
 
-    if (!name) return res.status(404).json({ success: false, message: "Full name requred" })
-    if (!email) return res.status(404).json({ success: false, message: "Email requred" })
-    if (!validator.isEmail(email)) return res.status(404).json({ success: false, message: "Invalid email address" })
-    if (!password) return res.status(404).json({ success: false, message: "password requred" })
-    if (password.length < 6) return res.status(404).json({ success: false, message: "The length of password must be greater than 6 digit" })
-    if (!phone) return res.status(404).json({ success: false, message: "Phone is required" })
-    if (phone.length < 10) return res.status(404).json({ success: false, message: "Phone lenght must be 10 digit" })
+    if (!name) return res.status(400).json({ success: false, message: "Full name requred" })
+    if (!email) return res.status(400).json({ success: false, message: "Email requred" })
+    if (!validator.isEmail(email)) return res.status(400).json({ success: false, message: "Invalid email address" })
+    if (!password) return res.status(400).json({ success: false, message: "password requred" })
+    if (password.length < 6) return res.status(400).json({ success: false, message: "The length of password must be greater than 6 digit" })
+    // if (!phone) return res.status(400).json({ success: false, message: "Phone is required" })
+    // if (phone.length < 10) return res.status(400).json({ success: false, message: "Phone lenght must be 10 digit" })
     
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -166,22 +166,16 @@ export const login = async (req, res) => {
 
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({
+      return res.status(404).json({
         success: false,
         message: "Invalid credentials",
       });
     }
 
-    // if (!user.isVerified) {
-    //   return res.status(400).json({
-    //     success: false,
-    //     message: "Your account is not verified. Please verify OTP.",
-    //   });
-    // }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({
+      return res.status(401).json({
         success: false,
         message: "Invalid credentials",
       });
@@ -207,7 +201,8 @@ export const login = async (req, res) => {
 
     return res.json({
       success: true,
-      message: "Login successful",
+      message: "Login successfull",
+      token,
       user: {
         id: user._id,
         name: user.name,
@@ -328,6 +323,7 @@ export const getUserProfile = async (req, res) => {
     res.status(200).json({
       success: true,
       user,
+      message:"Profile fetched successfully"
     });
 
   } catch (error) {

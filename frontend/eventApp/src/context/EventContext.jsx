@@ -6,7 +6,8 @@ import { useNavigate } from "react-router-dom";
 const ApiContext = createContext();
 
 export const ApiProvider = ({ children }) => {
-  const BASE_URL = "https://event-management-server-br57.onrender.com";
+  const BASE_URL = "http://localhost:3000";
+  // https://event-management-server-br57.onrender.com
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(false)
 
@@ -38,8 +39,24 @@ export const ApiProvider = ({ children }) => {
     }
   };
 
+
+
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post(`${BASE_URL}/api/users/logout`, {
+        withCredentials: true
+      });
+      if (response.data.success) {
+        navigate("/login")
+      }
+    } catch (error) {
+      console.log(error);
+
+    }
+  }
+
   return (
-    <ApiContext.Provider value={{ BASE_URL, user, setUser, isSidebarVisible, getUserProfile, setIsSidebarVisible }}>
+    <ApiContext.Provider value={{ BASE_URL, user, setUser, isSidebarVisible, getUserProfile, handleLogout, setIsSidebarVisible }}>
       {children}
     </ApiContext.Provider>
   );

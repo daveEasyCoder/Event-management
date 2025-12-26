@@ -37,7 +37,7 @@ app.use("/uploads", express.static("uploads"));
 
 // Database connection
 
-const mongoUri = process.env.MONGO_URI
+const mongoUri = "mongodb://localhost:27017/event"
 mongoose.connect(mongoUri).then(() => {
     console.log('Connected to MongoDB');
 }).catch(err => {
